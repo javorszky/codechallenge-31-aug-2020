@@ -9,6 +9,13 @@ Example:
 $ stockBuySell([110, 180, 260, 40, 310, 535, 695])
 $ “buy on day 4, sell on day 7”
 ```
+## solutions considered but ultimately discarded
+
+### binary search
+
+Essentially I would recursively split the slice of ints (array for non-Go people), then check their minimum / maximum, and then discard one half if the other one was a better candidate
+
+The reason I discarded that is if the slice ends up being super long, and the last two ints there are `[..., 9237492387, 1]` achieving the maximum diff, I would need to backtrack on the whole binary search again.
 
 ## bench test
 
