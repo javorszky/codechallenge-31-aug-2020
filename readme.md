@@ -1,6 +1,8 @@
 # 31 August 2020
 
-This week’s question:
+From [the email](https://buttondown.email/cassidoo/archive/music-touches-us-emotionally-where-words-alone/):
+
+**This week’s question:**
 Given an array of numbers that represent stock prices (where each number is the price for a certain day), find 2 days when you should buy and sell your stock for the highest profit.
 
 Example:
