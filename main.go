@@ -2,26 +2,88 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 func main() {
-	stocks := []uint32{110, 180, 260, 40, 310, 535, 695}
-
-	stockBuySell(stocks)
+	s := stockBuySell(slice100000)
+	fmt.Printf("%s\n", s.String())
 }
 
-func stockBuySell(prices []uint32) signal {
-	//var max, buy uint32
+func stockBuySell(prices []int) signal {
+	maxProfit := maxDiff(prices)
+	var changed = false
+	var done = false
+	var buy, sell int
+	var buyValue = 99999
+	var sellValue = 0
 	for i, v := range prices {
-		fmt.Printf("index is %d, value is %d\n", i, v)
+		if done {
+			break
+		}
+		for j, w := range prices {
+			changed = false
+			// Iterate over the part of the slice that comes after the element we're looking at for "buy".
+			if j <= i {
+				continue
+			}
+
+			// If the element is better than what we had, store it.
+			if v < buyValue {
+				buyValue = v
+				buy = i
+				changed = true
+			}
+
+			if w > sellValue {
+				sell = j
+				sellValue = w
+				changed = true
+			}
+
+			// if we've reached peak profit, abort.
+			if changed && sellValue - buyValue >= maxProfit{
+				done = true
+				break
+			}
+		}
 	}
-	return signal{}
+
+	// Return the current best option.
+	return signal{
+		buy: buy,
+		bV: buyValue,
+		sell: sell,
+		sV: sellValue,
+		profit: sellValue - buyValue,
+	}
+}
+
+func maxDiff(in []int) int {
+	// Remove duplicates
+	normalized := unique(in)
+	sort.Ints(normalized)
+	return normalized[len(normalized) -1] - normalized[0]
+}
+
+func unique(intSlice []int) []int {
+	keys := make(map[int]bool)
+	list := []int{}
+	for _, entry := range intSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }
 
 type signal struct {
 	buy int
 	sell int
-	profit uint32
+	bV int
+	sV int
+	profit int
 }
 
 
@@ -37,11 +99,11 @@ func (s *signal) SellDay() int {
 }
 
 // Profit will return the profit between the two.
-func (s *signal) Profit() uint32 {
+func (s *signal) Profit() int {
 	return s.profit
 }
 
 // String will return the human readable advice given the slice.
 func (s *signal) String() string {
-	return fmt.Sprintf("buy on day %d, sell on day %d for a profit of %d", s.buy, s.sell, s.profit)
+	return fmt.Sprintf("buy on day %d for %d, sell on day %d for %d for a profit of %d", s.buy + 1, s.bV, s.sell + 1, s.sV, s.profit)
 }
