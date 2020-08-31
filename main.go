@@ -11,34 +11,55 @@ func main() {
 }
 
 func stockBuySell(prices []int) signal {
+	var (
+		candidates []signal
+		changed = false
+		done = false
+		buy = 0
+		sell = 0
+		buyValue = 99999
+		sellValue = 0
+	)
+
 	maxProfit := maxDiff(prices)
-	var changed = false
-	var done = false
-	var buy, sell int
-	var buyValue = 99999
-	var sellValue = 0
-	for i, v := range prices {
+
+	for buyIndex, bV := range prices {
 		if done {
 			break
 		}
-		for j, w := range prices {
+
+		// The value considered for buy is higher than what we already have. No reason to check any further.
+		if bV >= buyValue {
+			continue
+		}
+
+		// if the value considered for buy is better than what we had, but it's past the sell date, store the previous
+		// pair of values in a candidate, and reset the sell.
+		if bV < buyValue && buyIndex > sell {
+			candidates = append(candidates, signal{
+				buy:    buy,
+				sell:   sell,
+				bV:     buyValue,
+				sV:     sellValue,
+				profit: sellValue-buyValue,
+			})
+			sell = buyIndex
+			sellValue = 0
+		}
+
+		buyValue = bV
+		buy = buyIndex
+
+		for sellIndex, sV := range prices {
 			changed = false
 			// Iterate over the part of the slice that comes after the element we're looking at for "buy".
-			if j <= i {
+			if sellIndex <= buyIndex {
 				continue
 			}
 
-			// If the element is better than what we had, store it.
-			if v < buyValue {
-				buyValue = v
-				buy = i
-				changed = true
-			}
-
-			if w > sellValue {
-				sell = j
-				sellValue = w
-				changed = true
+			if sV > sellValue {
+				sell = sellIndex
+				sellValue = sV
 			}
 
 			// if we've reached peak profit, abort.
@@ -68,7 +89,7 @@ func maxDiff(in []int) int {
 
 func unique(intSlice []int) []int {
 	keys := make(map[int]bool)
-	list := []int{}
+	var list []int
 	for _, entry := range intSlice {
 		if _, value := keys[entry]; !value {
 			keys[entry] = true

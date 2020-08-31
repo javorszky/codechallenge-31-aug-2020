@@ -23,11 +23,11 @@ The reason I discarded that is if the slice ends up being super long, and the la
 goos: darwin
 goarch: amd64
 pkg: github.com/javorszky/cassidoo-31-aug-2020
-Benchmark_stockBuySell10-16        	 1501130	       798 ns/op
-Benchmark_stockBuySell100-16       	   67050	     18174 ns/op
-Benchmark_stockBuySell1000-16      	    3284	    362877 ns/op
-Benchmark_stockBuySell10000-16     	      37	  30012136 ns/op
-Benchmark_stockBuySell100000-16    	      15	  69868156 ns/op
+Benchmark_stockBuySell10-16        	 1469340	       803 ns/op
+Benchmark_stockBuySell100-16       	  119161	     10265 ns/op
+Benchmark_stockBuySell1000-16      	   10000	    109100 ns/op
+Benchmark_stockBuySell10000-16     	    2902	    450896 ns/op
+Benchmark_stockBuySell100000-16    	     430	   2990930 ns/op
 PASS
-ok  	github.com/javorszky/cassidoo-31-aug-2020	6.919s
+ok  	github.com/javorszky/cassidoo-31-aug-2020	7.370s
 ```
