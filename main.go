@@ -5,6 +5,8 @@ import (
 	"sort"
 )
 
+var sliceArtificial = []int{30, 35, 40, 45, 90, 20, 60}
+
 func main() {
 	s := stockBuySell(slice100000)
 	fmt.Printf("%s\n", s.String())
@@ -70,14 +72,21 @@ func stockBuySell(prices []int) signal {
 		}
 	}
 
-	// Return the current best option.
-	return signal{
+	candidates = append(candidates, signal{
 		buy: buy,
 		bV: buyValue,
 		sell: sell,
 		sV: sellValue,
 		profit: sellValue - buyValue,
-	}
+	})
+
+	// Sort all available candidates by profit.
+	sort.SliceStable(candidates, func(i, j int) bool {
+		return candidates[i].profit > candidates[j].profit
+	})
+
+	// Return the one with the biggest profit.
+	return candidates[0]
 }
 
 func maxDiff(in []int) int {
